@@ -10,17 +10,16 @@ angular.module("ChatApp",['ngNewRouter','ngMaterial','firebase'])
 
         this.authenticate = function () {
             var ref = new Firebase(firebaseURL);
-            var refUsers = ref.child("users");
             ref.authWithOAuthPopup("facebook", function(error, authData) {
                 if (error) {
                     console.log("Login Failed!", error);
                 } else {
+                    var refUsers = ref.child("users").child(authData.uid);
                     console.log("Authenticated successfully with payload:", authData);
                     this.users = $firebaseArray(refUsers);
                     this.users.$add({
                             Name: authData.facebook.displayName,
                             Email: authData.facebook.email,
-                            uid: authData.uid,
                             profilePicture: authData.facebook.cachedUserProfile.picture.data.url
                     });
 
