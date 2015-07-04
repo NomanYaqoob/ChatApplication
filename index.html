@@ -25,43 +25,15 @@
 
     <script src="./js/app.js"></script>
     <script src="./components/home/home.js"></script>
+    <script src="./components/login/login.js"></script>
+    <script src="./components/signup/signup.js"></script>
 
 </head>
 <body ng-app="ChatApp">
 
 <div ng-controller="MainCtrl as Ctrl" class="container">
 
-    <md-button class="md-raised md-primary col-md-4 col-md-offset-4" ng-click="Ctrl.authenticate()">Login with Facebook</md-button>
-    <br/>
-    <div class="col-md-6 col-md-offset-3">
-    <div layout layout-sm="column" >
-        <md-input-container flex>
-            <label>First name</label>
-            <input ng-model="Ctrl.customUser.firstName">
-        </md-input-container>
-        <md-input-container flex>
-            <label>Last Name</label>
-            <input ng-model="Ctrl.customUser.lastName">
-        </md-input-container>
-        </div>
-        <md-input-container >
-            <label>Email</label>
-            <input required name="clientName" ng-model="Ctrl.customUser.email">
-            <div ng-messages="">
-                <div ng-message="required">This is required.</div>
-            </div>
-        </md-input-container>
-        <md-input-container >
-            <label>Password</label>
-            <input required name="clientName" type="password" ng-model="Ctrl.customUser.password">
-            <div ng-messages="projectForm.clientName.$error">
-                <div ng-message="required">This is required.</div>
-            </div>
-        </md-input-container>
-        <md-button class="md-raised btnStandard col-md-4 col-md-offset-4" ng-click="Ctrl.registerUser()">Create Account</md-button>
-    </div>
-</div>
-
 <div ng-viewport=""></div>
+</div>
 </body>
 </html>

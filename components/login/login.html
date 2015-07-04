@@ -1,0 +1,17 @@
+<div class="col-md-6 col-md-offset-3">
+<md-input-container >
+    <label>Email</label>
+    <input required name="clientName" ng-model="login.customUser.email">
+    <div ng-messages="">
+        <div ng-message="required">This is required.</div>
+    </div>
+</md-input-container>
+<md-input-container >
+    <label>Password</label>
+    <input required name="clientName" type="password" ng-model="login.customUser.password">
+    <div ng-messages="projectForm.clientName.$error">
+        <div ng-message="required">This is required.</div>
+    </div>
+</md-input-container>
+    <md-button class="md-raised btnStandard col-md-4 col-md-offset-4" ng-click="login.Login('/home')">Login</md-button>
+</div>
