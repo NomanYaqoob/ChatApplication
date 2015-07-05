@@ -1,0 +1,31 @@
+{
+    "rules": {
+        "users" : {
+          "$user" : {
+            ".read" : "auth != null && auth.uid == $user",
+            ".write" : "auth != null && auth.uid == $user && newData.hasChildren(['firstName','lastName'])"
+          }
+        },
+        "userGroups" : {
+          "$user" : {
+            ".read" : "auth != null",
+            "$groupName":{
+              ".write" : "auth != null && auth.uid == $user && root.child('users/'+ $user).exists() && root.child('userGroups/'+auth.uid+'/'+$groupName).val() === 1"
+            }
+          }
+        },
+        "groupMembers" :  {
+          "$groupName" : {
+            ".read" : "auth != null",
+            "$user" : {
+              ".write" : "auth != null && auth.uid == $user && root.child('groupMembers/'+$groupName+'/'+$user).val() === 1"
+            }
+          }
+        },
+
+        "groups" : {
+          ".read" : "auth != null",
+          ".write" : "auth != null"
+        }
+    }
+}
