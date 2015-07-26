@@ -4,50 +4,76 @@
 
 
 angular.module("ChatApp")
-    .controller("SignupController", function (firebaseURL,$location,$firebaseObject) {
+    .controller("SignupController", function (firebaseURL,$location,$firebaseObject,$firebaseArray,loggedInUser,$mdDialog,$timeout) {
+        var clearAuth = false;
         this.authenticate = function (view) {
             var ref = new Firebase(firebaseURL);
             ref.authWithOAuthPopup("facebook", function(error, authData) {
                 if (error) {
                     console.log("Login Failed!", error);
+                    clearAuth = false;
                 } else {
                     var refUsers = ref.child("users").child(authData.uid);
                     console.log("Authenticated successfully with payload:", authData);
                     this.users = $firebaseObject(refUsers);
                     this.users.Name = authData.facebook.displayName;
-                    this.users.Email = authData.facebook.email;
+                    this.users.email = authData.facebook.email;
                     this.users.profilePicture = authData.facebook.cachedUserProfile.picture.data.url;
                     this.users.$save();
+                    $timeout(function () {
+                        loggedInUser = authData;
+                        console.log(loggedInUser);
+                    },0);
+                    $location.path(view);
+                    //clearAuth = true;
                 }
             },{
                 scope: "email,user_likes" // the permissions requested
             });
-            $location.path(view)
+            //if(clearAuth) {
+            //
+            //}
+
         };
 
-        this.transfer = false;
+        this.alreadyPresent = false;
 
-        this.registerUser = function (view) {
+        this.registerUser = function (view,ev) {
             var ref = new Firebase(firebaseURL);
-            ref.createUser({
-                    firstName: this.customUser.firstName,
-                    lastName:  this.customUser.lastName,
-                    email: this.customUser.email,
-                    password : this.customUser.password
-                },
-                function (error, userData) {
-                    if(error) {
-                        console.log("Error creating user:", error);
-                        this.transfer = false;
-                    } else {
-                        console.log("Successfully created user account with uid:", userData.uid);
-                        this.transfer = true;
-                    }
-                }
-            );
+            var refCustomUser = new Firebase(firebaseURL).child("customUser");
+            this.newUser = $firebaseArray(refCustomUser);
 
-            /*if(this.transfer){*/
-                $location.path(view);
+            angular.forEach(this.newUser, function (user, key) {
+
+                if(this.customUser.email == user.email )
+                    this.alreadyPresent = true;
+                else
+                    this.alreadyPresent = false;
+            },this);
+
+            if(this.alreadyPresent) {
+                this.newUser.$add({
+                    Name: this.customUser.Name,
+                    email: this.customUser.email,
+                    password: this.customUser.password
+                }).then(function (user) {
+                    $location.path(view);
+                });
+
+                this.customUser = "";
+            }
+            else {
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .parent(angular.element(document.body))
+                        .title('Welcome')
+                        .content('Email Already Used by another account')
+                        .ok('Ok')
+                        .targetEvent(ev)
+                );
+                this.customUser.email = "";
+            }
+
             //}
         }
 

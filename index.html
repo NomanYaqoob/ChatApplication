@@ -27,12 +27,28 @@
     <script src="./components/home/home.js"></script>
     <script src="./components/login/login.js"></script>
     <script src="./components/signup/signup.js"></script>
+    <script src="./components/findfriend/findfriend.js"></script>
 
 </head>
 <body ng-app="ChatApp">
-
 <div ng-controller="MainCtrl as Ctrl" class="container">
+    <div id="chatbox1">
+        <md-toolbar id="head" class="md-theme-light">
+            <h2 class="md-toolbar-tools">
+                <img src="./images/com.axosoft.PureChat.png" width="50px" height="50px"><span>Chat B0X</span>
+                <span id="options">
+                    <md-button ng-link="home">Home</md-button>
+                    <md-button ng-link="signup" >Sign up</md-button>
+                    <md-button ng-link="login" ng-if="Ctrl.currentUserLogged == null">Login</md-button>
+                    <!--<md-button >Users</md-button>-->
+                    <md-button ng-link="findfriend">Find Friend</md-button>
+                    <md-button ng-click="" ng-if="Ctrl.currentUserLogged != null">Log out</md-button>
+                    <!--<md-button>Log out</md-button>-->
 
+                </span>
+            </h2>
+        </md-toolbar><br/>
+    </div>
 <div ng-viewport=""></div>
 </div>
 </body>

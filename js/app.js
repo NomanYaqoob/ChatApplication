@@ -6,8 +6,11 @@
 
 angular.module("ChatApp",['ngNewRouter','ngMdIcons','ngMaterial','firebase'])
     .constant("firebaseURL","https://netchat.firebaseio.com/")
-.controller("MainCtrl", function ($router) {
+    .value("loggedInUser","")
+.controller("MainCtrl", function ($router,loggedInUser ) {
 
+        this.currentUserLogged = loggedInUser;
+        console.log(this.currentUserLogged);
         this.customUser = {};
         //this.homeFunc = function () {
         //    console.log($router);
@@ -15,7 +18,8 @@ angular.module("ChatApp",['ngNewRouter','ngMdIcons','ngMaterial','firebase'])
                 {path:"/",redirectTo:"/signup"},
                 {path:"/home",component:"home"},
                 {path:"/login",component:"login"},
-                {path:"/signup",component:"signup"}
+                {path:"/signup",component:"signup"},
+                {path:"/findfriend",component:"findfriend"}
                 //{path:"/edit",component:"edit"}
             ]);
         //}
