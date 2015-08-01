@@ -4,7 +4,7 @@
 
 
 angular.module("ChatApp")
-    .controller("SignupController", function (firebaseURL,$location,$firebaseObject,$firebaseArray,loggedInUser,$mdDialog,$timeout) {
+    .controller("SignupController", function (firebaseURL,$location,$firebaseObject,$firebaseArray,loggedInUser,$mdDialog) {
         var clearAuth = false;
         this.authenticate = function (view) {
             var ref = new Firebase(firebaseURL);
@@ -16,14 +16,13 @@ angular.module("ChatApp")
                     var refUsers = ref.child("users").child(authData.uid);
                     console.log("Authenticated successfully with payload:", authData);
                     this.users = $firebaseObject(refUsers);
+                    //this.users = authData;
                     this.users.Name = authData.facebook.displayName;
                     this.users.email = authData.facebook.email;
                     this.users.profilePicture = authData.facebook.cachedUserProfile.picture.data.url;
+                    this.users.uid = authData.uid;
                     this.users.$save();
-                    $timeout(function () {
-                        loggedInUser = authData;
-                        console.log(loggedInUser);
-                    },0);
+                    loggedInUser.setUser(authData);
                     $location.path(view);
                     //clearAuth = true;
                 }
@@ -51,7 +50,7 @@ angular.module("ChatApp")
                     this.alreadyPresent = false;
             },this);
 
-            if(this.alreadyPresent) {
+            if(!this.alreadyPresent) {
                 this.newUser.$add({
                     Name: this.customUser.Name,
                     email: this.customUser.email,
