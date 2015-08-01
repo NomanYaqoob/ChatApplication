@@ -21,8 +21,8 @@ angular.module("ChatApp")
                                     .targetEvent(ev)
                             );
                             invalidEORP = false;
-                            loggedInUser = user;
-                            console.log(loggedInUser);
+                            loggedInUser.setUser(user);
+                            //console.log(loggedInUser);
                             $location.path(view);
 
                         }

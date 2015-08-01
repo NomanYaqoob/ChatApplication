@@ -28,6 +28,7 @@
     <script src="./components/login/login.js"></script>
     <script src="./components/signup/signup.js"></script>
     <script src="./components/findfriend/findfriend.js"></script>
+    <script src="./js/factory/currentUserDetails.js"></script>
 
 </head>
 <body ng-app="ChatApp">
@@ -42,7 +43,7 @@
                     <md-button ng-link="login" ng-if="Ctrl.currentUserLogged == null">Login</md-button>
                     <!--<md-button >Users</md-button>-->
                     <md-button ng-link="findfriend">Find Friend</md-button>
-                    <md-button ng-click="" ng-if="Ctrl.currentUserLogged != null">Log out</md-button>
+                    <md-button ng-click="" ng-if="Ctrl.currentUserLogged == undefined">Log out</md-button>
                     <!--<md-button>Log out</md-button>-->
 
                 </span>

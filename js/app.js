@@ -9,7 +9,7 @@ angular.module("ChatApp",['ngNewRouter','ngMdIcons','ngMaterial','firebase'])
     .value("loggedInUser","")
 .controller("MainCtrl", function ($router,loggedInUser ) {
 
-        this.currentUserLogged = loggedInUser;
+        this.currentUserLogged = loggedInUser.getUser();
         console.log(this.currentUserLogged);
         this.customUser = {};
         //this.homeFunc = function () {
