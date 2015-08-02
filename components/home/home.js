@@ -13,12 +13,47 @@ angular.module("ChatApp")
         var ref2 = new Firebase(firebaseURL).child('users');
         this.userFromCustomLogin = $firebaseArray(ref);
         this.userFromFacebook =  $firebaseObject(ref2);
+        var generalRef = new Firebase(firebaseURL);
         this.msgs = [];
         this.myUser = loggedInUser.getUser();
+        var currentChatId;
 
         this.startChat = function (newFriendId) {
-            console.log(newFriendId);
-            if(this.myUser.uid != undefined){
+            //console.log(newFriendId);
+            //this.chatNode = $firebaseArray(refChat);
+
+
+
+            if(this.myUser.uid != undefined)
+                generalRef = generalRef.child("message-ref").child(this.myUser.uid).child(newFriendId);
+            else
+                generalRef = generalRef.child("message-ref").child(this.myUser.$id).child(newFriendId);
+
+            generalRef.once("value", function (snapshot) {
+                if(snapshot.exists()) {
+                    alert("exists");
+                    currentChatId = snapshot.val();
+                    for(var obj in currentChatId){
+                        currentChatId = currentChatId[obj];
+                        console.log(currentChatId);
+                    }
+                    this.msgs = $firebaseArray(refChat.child(currentChatId));
+                }
+                else {
+                    alert("not exists");
+                    var abc = refChat.push({abc:"abc"});
+                    currentChatId = abc.key();
+                    console.log(currentChatId);
+                    generalRef.push(currentChatId)
+                }
+                //console.log(snapshot.val())
+            },this);
+            /*
+            this.chatNode.$add({abc: "xyz"}).then(function (ref) {
+                currentChatId = ref.key();
+            });*/
+            console.log(currentChatId);
+           /* if(this.myUser.uid != undefined){
                 refChatOfSender = new Firebase(firebaseURL).child("messagesRef").child(this.myUser.uid);
                 this.userIsFromFacebook = true;
             }
@@ -41,9 +76,10 @@ angular.module("ChatApp")
             }
             else {
                 this.refReceiver.$add({friendId: this.myUser.$id});
-            }
+            }*/
 
             //this.refReceiver.$save();
+            //this.msgs = $firebaseArray(refChat.child(currentChatId));
             this.enableChatStart = false;
         };
 
@@ -52,7 +88,18 @@ angular.module("ChatApp")
 
 
         this.push = function () {
-                var d = new Date();
+            //this.chatNode[currentChatId].members.push({msg:this.msg,time: new Date()});
+
+
+
+            refChat.child(currentChatId).push({
+                msg:this.msg,
+                time: new Date().toString()
+            });
+
+            //this.msgArray = $firebaseArray(refChat.child(currentChatId));
+            //this.msgArray.$add({msg:this.msg,time: new Date()});
+               /* var d = new Date();
             var refNewChat = new Firebase(firebaseURL).child("chatBox");
             this.chatId = $firebaseArray(refNewChat);
 
@@ -105,6 +152,6 @@ angular.module("ChatApp")
                     image: "http://www.funddreamsindia.com/images/avatar.jpg"
                 });
                 this.msg = "";
-            }
+            }*/
         };
     });
